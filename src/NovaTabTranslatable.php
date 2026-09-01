@@ -176,7 +176,6 @@ class NovaTabTranslatable extends Field
             // Keep the field's own storage callback (it carries storeAs(), storeOriginalName(), storeSize()
             // or a user defined store()) and only redirect whatever it produces into the translations.
             $nativeStore = $translatedField->storageCallback;
-
             $translatedField
                 ->store(function ($request, $model, $attribute, $requestAttribute, $disk = null, $storageDir = null) use ($nativeStore, $locale, $originalAttribute) {
                     // storeAs() callbacks usually reach for the original request key, which is renamed here
@@ -208,14 +207,14 @@ class NovaTabTranslatable extends Field
 
                     return true;
                 })
-                ->thumbnail(function ($value) use ($translatedField) {
+                ->thumbnail($originalField->thumbnailUrlCallback ?? function ($value) use ($translatedField) {
                     if(!$value) return null;
 
                     $disk = $translatedField->getStorageDisk();
 
                     return Storage::disk($disk)->url($value);
                 })
-                ->preview(function ($value) use ($translatedField) {
+                ->preview($originalField->previewUrlCallback ?? function ($value) use ($translatedField) {
                     if(!$value) return null;
 
                     $disk = $translatedField->getStorageDisk();
