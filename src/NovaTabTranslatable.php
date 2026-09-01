@@ -209,16 +209,16 @@ class NovaTabTranslatable extends Field
                     return true;
                 })
                 ->thumbnail(function ($value) use ($translatedField) {
-                    $disk = $translatedField->getStorageDisk();
+                    if(!$value) return null;
 
-                    if (!Storage::disk($disk)->exists($value)) return false;
+                    $disk = $translatedField->getStorageDisk();
 
                     return Storage::disk($disk)->url($value);
                 })
                 ->preview(function ($value) use ($translatedField) {
-                    $disk = $translatedField->getStorageDisk();
+                    if(!$value) return null;
 
-                    if (!Storage::disk($disk)->exists($value)) return false;
+                    $disk = $translatedField->getStorageDisk();
 
                     return Storage::disk($disk)->url($value);
                 });
